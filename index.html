@@ -3,80 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Export Calculator</title>
+<title>Export Calculator Pro</title>
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#1e3c72,#2a5298);
     margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg,#1f4037,#99f2c8);
+}
+
+/* Center wrapper */
+.wrapper{
+    max-width:950px;
+    margin:40px auto;
     padding:15px;
 }
 
-.container{
-    max-width:900px;
-    margin:auto;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+/* Glass card */
+.card{
+    background: rgba(255,255,255,0.95);
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
 }
 
-h1{text-align:center;}
+/* Heading */
+h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:#1c2b36;
+}
 
+/* Sections */
+.section{
+    margin-bottom:25px;
+}
+
+.section-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:10px;
+    color:#2f89c5;
+    border-bottom:2px solid #eee;
+    padding-bottom:6px;
+}
+
+/* Grid */
 .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:15px;
 }
 
-.full{grid-column:1/-1;}
+.full{
+    grid-column:1/-1;
+}
 
-input,select,button{
+label{
+    font-size:13px;
+    font-weight:600;
+}
+
+/* Inputs */
+input,select{
     width:100%;
     padding:10px;
-    border-radius:6px;
-    border:1px solid #ccc;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin-top:5px;
+    font-size:14px;
+    transition:0.2s;
+}
+
+input:focus,select:focus{
+    border-color:#2f89c5;
+    outline:none;
+    box-shadow:0 0 6px rgba(47,137,197,0.3);
+}
+
+/* Button */
+button{
+    width:100%;
+    padding:14px;
+    background: linear-gradient(135deg,#2f89c5,#5dade2);
+    border:none;
+    color:white;
+    font-size:16px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Result */
+.result{
+    margin-top:25px;
+    background:#f7fbff;
+    padding:18px;
+    border-radius:10px;
+    border-left:5px solid #2f89c5;
+    line-height:1.6;
     font-size:15px;
 }
 
-button{
-    background:#2f89c5;
-    color:white;
-    border:none;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.result{
-    margin-top:20px;
-    background:#f2f6fc;
-    padding:15px;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-/* Mobile */
+/* Responsive */
 @media(max-width:768px){
     .grid{grid-template-columns:1fr;}
 }
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-<h1>Export Calculator</h1>
+<div class="wrapper">
+<div class="card">
+
+<h1>Export Container Calculator</h1>
+
+<!-- PRODUCT -->
+<div class="section">
+<div class="section-title">Product Details</div>
 
 <div class="grid">
-
-<div class="full">
+<div>
 <label>Product Name</label>
 <input type="text" id="product">
 </div>
 
 <div>
-<label>Product Weight (kg per item)</label>
+<label>Product Weight (kg)</label>
 <input type="number" id="productWeight" step="0.01">
 </div>
 
@@ -89,19 +151,26 @@ button{
 <label>Items per Carton</label>
 <input type="number" id="itemsPerCarton">
 </div>
+</div>
+</div>
 
+<!-- CARTON -->
+<div class="section">
+<div class="section-title">Carton Details</div>
+
+<div class="grid">
 <div>
-<label>Carton Length (cm)</label>
+<label>Length (cm)</label>
 <input type="number" id="length">
 </div>
 
 <div>
-<label>Carton Width (cm)</label>
+<label>Width (cm)</label>
 <input type="number" id="width">
 </div>
 
 <div>
-<label>Carton Height (cm)</label>
+<label>Height (cm)</label>
 <input type="number" id="height">
 </div>
 
@@ -109,23 +178,34 @@ button{
 <label>Empty Carton Weight (kg)</label>
 <input type="number" id="cartonWeight">
 </div>
+</div>
+</div>
 
-<div class="full">
+<!-- CONTAINER -->
+<div class="section">
+<div class="section-title">Container Settings</div>
+
+<div class="grid">
+<div>
 <label>Container Type</label>
 <select id="containerType">
-<option value="20">20 ft</option>
-<option value="40">40 ft</option>
+<option value="20">20 ft Container</option>
+<option value="40">40 ft Container</option>
 </select>
 </div>
 
-<div class="full">
-<button onclick="calculate()">Calculate</button>
+<div>
+<label>Loading Efficiency (%)</label>
+<input type="number" id="efficiency" value="92">
+</div>
+</div>
 </div>
 
-</div>
+<button onclick="calculate()">Calculate Container Plan</button>
 
 <div id="result" class="result"></div>
 
+</div>
 </div>
 
 <script>
@@ -141,20 +221,16 @@ let W = parseFloat(document.getElementById("width").value);
 let H = parseFloat(document.getElementById("height").value);
 let cartonWeight = parseFloat(document.getElementById("cartonWeight").value);
 let type = document.getElementById("containerType").value;
+let efficiency = parseFloat(document.getElementById("efficiency").value) / 100;
 
-// validation
-if(!product || productWeight<=0 || totalItems<=0 || itemsPerCarton<=0 || L<=0 || W<=0 || H<=0 || cartonWeight<=0){
+if(!product || isNaN(productWeight) || isNaN(totalItems) || isNaN(itemsPerCarton) || isNaN(L) || isNaN(W) || isNaN(H) || isNaN(cartonWeight)){
 document.getElementById("result").innerHTML="Please fill all fields correctly.";
 return;
 }
 
-// cartons required
 let cartonsNeeded = Math.ceil(totalItems / itemsPerCarton);
-
-// gross carton weight
 let grossCartonWeight = (itemsPerCarton * productWeight) + cartonWeight;
 
-// container specs (realistic payload approx)
 let container;
 
 if(type=="20"){
@@ -163,30 +239,24 @@ container={L:589,W:235,H:239,maxWeight:27000};
 container={L:1203,W:235,H:239,maxWeight:26500};
 }
 
-// volume based fit
-let fit1 = Math.floor(container.L/L) * Math.floor(container.W/W) * Math.floor(container.H/H);
-let fit2 = Math.floor(container.L/W) * Math.floor(container.W/L) * Math.floor(container.H/H);
+let fit1=Math.floor(container.L/L)*Math.floor(container.W/W)*Math.floor(container.H/H);
+let fit2=Math.floor(container.L/W)*Math.floor(container.W/L)*Math.floor(container.H/H);
 
-// best orientation
-let cartonsByVolume = Math.max(fit1,fit2);
+let cartonsByVolume=Math.max(fit1,fit2);
+cartonsByVolume=Math.floor(cartonsByVolume*efficiency);
 
-// weight based fit
-let cartonsByWeight = Math.floor(container.maxWeight / grossCartonWeight);
+let cartonsByWeight=Math.floor(container.maxWeight/grossCartonWeight);
 
-// final cartons
-let cartonsFit = Math.min(cartonsByVolume, cartonsByWeight);
+let cartonsFit=Math.min(cartonsByVolume,cartonsByWeight);
+let itemsPerContainer=cartonsFit*itemsPerCarton;
 
-// items per container
-let itemsPerContainer = cartonsFit * itemsPerCarton;
-
-// output
-document.getElementById("result").innerHTML =
+document.getElementById("result").innerHTML=
 `
-Product: ${product} <br><br>
-Cartons Required: ${cartonsNeeded} <br>
-Cartons Fit per Container: ${cartonsFit} <br>
-Items per Container: ${itemsPerContainer} <br>
-Carton Gross Weight: ${grossCartonWeight.toFixed(2)} kg
+<b>Product:</b> ${product}<br>
+<b>Cartons Required:</b> ${cartonsNeeded}<br>
+<b>Cartons per Container:</b> ${cartonsFit}<br>
+<b>Items per Container:</b> ${itemsPerContainer}<br>
+<b>Carton Gross Weight:</b> ${grossCartonWeight.toFixed(2)} kg
 `;
 
 }
